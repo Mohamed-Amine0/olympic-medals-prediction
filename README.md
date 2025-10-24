@@ -2,6 +2,18 @@
 
 Projet Django de prédiction des médailles olympiques basé sur l'analyse de données historiques.
 
+## 📸 Démonstration
+
+![Olympic Medals Prediction Demo](https://github.com/Mohamed-Amine0/olympic-medals-prediction/blob/main/demo/screenshot.png?raw=true)
+
+L'application propose une interface intuitive avec :
+- 📊 **Dashboard principal** avec statistiques globales (20 Jeux, 75 Pays, 500 Athlètes, 1000 Médailles)
+- 🏆 **Top 10 des pays par médailles** avec classement détaillé (Or, Argent, Bronze)
+- 🗓️ **Liste des Jeux Olympiques récents** (Beijing 2022, Tokyo 2020, PyeongChang 2018, etc.)
+- 📈 **Analyses avancées** des tendances historiques et performances par discipline
+- 🤖 **Prédictions intelligentes** basées sur le machine learning
+- 👥 **Profils d'athlètes** avec leurs parcours olympiques
+
 ## Description
 
 Ce projet est une application web Django qui permet de :
