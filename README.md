@@ -1,6 +1,6 @@
 # Olympic Medals Prediction
 
-Projet Django de prédiction des médailles olympiques basé sur l'analyse de données historiques.
+Projet de prédiction des médailles olympiques avec architecture moderne React + Django REST API.
 
 ## 📸 Démonstration
 
@@ -16,7 +16,7 @@ L'application propose une interface intuitive avec :
 
 ## Description
 
-Ce projet est une application web Django qui permet de :
+Application web moderne permettant de :
 - Visualiser les statistiques des Jeux Olympiques historiques
 - Explorer les performances des pays et athlètes
 - Analyser les médailles par discipline et par jeu
@@ -24,100 +24,182 @@ Ce projet est une application web Django qui permet de :
 
 ## Architecture
 
-Le projet suit une architecture MVC (Model-View-Controller) Django :
-- **Models** : Modèles de données (OlympicGame, Athlete, Country, Medal, CountryPrediction)
-- **Views** : Vues pour gérer la logique métier
-- **Templates** : Templates HTML stylisés avec Bootstrap 5
+Le projet suit une architecture moderne découplée :
+- **Frontend** : Application React avec Vite, React Router, Bootstrap 5
+- **Backend** : API REST Django avec Django REST Framework
+- **Database** : SQLite3
+- **Communication** : API REST JSON
 
 ## Technologies Utilisées
 
-- **Backend** : Django 5.2.1
-- **Database** : SQLite3
-- **Frontend** : HTML5, Bootstrap 5.3, Bootstrap Icons
-- **Python Libraries** : pandas, openpyxl (pour le parsing des données)
+### Backend
+- **Django 5.2.1** - Framework web Python
+- **Django REST Framework 3.15.2** - API REST
+- **django-cors-headers 4.4.0** - Gestion CORS
+- **SQLite3** - Base de données
+- **pandas 2.3.0** - Manipulation de données
+- **openpyxl 3.1.2** - Parsing Excel
+
+### Frontend
+- **React 18** - Bibliothèque UI
+- **Vite** - Build tool moderne et rapide
+- **React Router** - Routing côté client
+- **Axios** - Client HTTP pour API
+- **Bootstrap 5** - Framework CSS
+- **Bootstrap Icons** - Icônes
 
 ## Structure du Projet
 
 ```
 olympic-medals-prediction/
-├── config/                 # Configuration Django
+├── frontend/               # Application React
+│   ├── src/
+│   │   ├── components/    # Composants réutilisables
+│   │   ├── pages/         # Pages de l'application
+│   │   ├── services/      # Services API
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
+├── config/                # Configuration Django
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
-├── predictions/            # Application principale
-│   ├── models.py          # Modèles de données
-│   ├── views.py           # Vues
-│   ├── urls.py            # URLs
-│   ├── admin.py           # Configuration admin Django
-│   └── templates/         # Templates HTML
-│       └── predictions/
-│           ├── base.html
-│           ├── home.html
-│           ├── countries_list.html
-│           ├── country_detail.html
-│           ├── games_list.html
-│           ├── game_detail.html
-│           ├── athletes_list.html
-│           └── predictions_list.html
-├── data/                  # Données sources
+├── predictions/           # Application Django
+│   ├── models.py         # Modèles de données
+│   ├── views.py          # Vues Django (legacy)
+│   ├── api_views.py      # ViewSets API REST
+│   ├── serializers.py    # Serializers DRF
+│   ├── urls.py           # URLs Django
+│   ├── api_urls.py       # URLs API REST
+│   └── templates/        # Templates Django (legacy)
+├── data/                 # Données sources
 │   ├── olympic_athletes.json
 │   ├── olympic_hosts.xml
 │   ├── olympic_medals.xlsx
 │   └── olympic_results.html
-├── import_data.py         # Script d'import des données
-├── manage.py              # Script de gestion Django
-└── db.sqlite3             # Base de données SQLite
+├── import_data.py        # Script d'import des données
+├── manage.py
+└── requirements.txt
 ```
 
 ## Installation
 
-1. Assurez-vous d'avoir Python 3.8+ installé
+### Prérequis
+- Python 3.8+
+- Node.js 18+
+- npm 9+
 
-2. Installez les dépendances (si nécessaire) :
+### Backend Django
+
+1. Installez les dépendances Python :
 ```bash
-pip install django pandas openpyxl
+pip install -r requirements.txt
 ```
 
-3. Appliquez les migrations (si ce n'est pas déjà fait) :
+2. Appliquez les migrations :
 ```bash
 python manage.py migrate
 ```
 
-4. Importez les données (si ce n'est pas déjà fait) :
+3. Importez les données :
 ```bash
 python import_data.py
 ```
 
-## Utilisation
-
-### Démarrer le Serveur de Développement
-
+4. Démarrez le serveur Django :
 ```bash
 python manage.py runserver
 ```
 
-L'application sera accessible sur : http://127.0.0.1:8000/
+Le backend API sera accessible sur : http://localhost:8000/api/
 
-### Pages Disponibles
+### Frontend React
 
-- **Accueil** : `/` - Statistiques globales et top pays
-- **Pays** : `/countries/` - Liste de tous les pays participants
-- **Détail Pays** : `/countries/<id>/` - Détails et médailles d'un pays
-- **Jeux Olympiques** : `/games/` - Liste des Jeux Olympiques
-- **Détail Jeu** : `/games/<id>/` - Détails d'un Jeu Olympique
-- **Athlètes** : `/athletes/` - Liste des athlètes
-- **Prédictions** : `/predictions/` - Prédictions pour les prochains jeux
-- **Admin** : `/admin/` - Interface d'administration Django
-
-### Interface Admin Django
-
-Pour accéder à l'interface d'administration, créez un superutilisateur :
-
+1. Naviguez vers le dossier frontend :
 ```bash
-python manage.py createsuperuser
+cd frontend
 ```
 
-Puis connectez-vous sur http://127.0.0.1:8000/admin/
+2. Installez les dépendances :
+```bash
+npm install
+```
+
+3. Créez le fichier .env :
+```bash
+cp .env.example .env
+```
+
+4. Démarrez le serveur de développement :
+```bash
+npm run dev
+```
+
+L'application React sera accessible sur : http://localhost:5173/
+
+## Endpoints API
+
+### Statistiques
+- `GET /api/stats/overview/` - Statistiques globales
+
+### Pays
+- `GET /api/countries/` - Liste des pays
+- `GET /api/countries/{id}/` - Détails d'un pays
+- `GET /api/countries/top/` - Top 10 pays
+
+### Jeux Olympiques
+- `GET /api/games/` - Liste des jeux
+- `GET /api/games/{id}/` - Détails d'un jeu
+- `GET /api/games/{id}/top_countries/` - Top pays pour un jeu
+
+### Athlètes
+- `GET /api/athletes/` - Liste des athlètes
+- `GET /api/athletes/{id}/` - Détails d'un athlète
+
+### Médailles
+- `GET /api/medals/` - Liste des médailles
+- `GET /api/medals/?country={id}` - Médailles par pays
+- `GET /api/medals/?game={id}` - Médailles par jeu
+
+### Prédictions
+- `GET /api/predictions/` - Liste des prédictions
+
+Tous les endpoints supportent la pagination avec les paramètres `?page={num}`.
+
+## Fonctionnalités
+
+### Implémentées ✅
+- ✅ API REST complète avec Django REST Framework
+- ✅ Frontend React moderne avec Vite
+- ✅ Routing React Router
+- ✅ Communication frontend-backend via Axios
+- ✅ Configuration CORS
+- ✅ Interface responsive Bootstrap 5
+- ✅ Visualisation des statistiques globales
+- ✅ Liste et détails des pays
+- ✅ Liste et détails des Jeux Olympiques
+- ✅ Liste des athlètes
+- ✅ Analyse des médailles par discipline
+- ✅ Pagination des résultats
+- ✅ Gestion des erreurs et chargement
+
+### À Développer 🔄
+- 🔄 Modèle de machine learning pour les prédictions
+- 🔄 Génération automatique des prédictions
+- 🔄 Graphiques et visualisations avancées (Chart.js)
+- 🔄 Filtres et recherche avancée
+- 🔄 Export des données (CSV, Excel)
+- 🔄 Tests unitaires frontend et backend
+- 🔄 Déploiement production
+
+## Configuration CORS
+
+Le backend Django est configuré pour accepter les requêtes depuis :
+- http://localhost:5173 (Vite dev server)
+- http://localhost:3000 (Alternative)
+
+Modifiez `config/settings.py` pour ajouter d'autres origines.
 
 ## Modèles de Données
 
@@ -136,95 +218,45 @@ Représente une médaille olympique avec sa discipline, type (Or/Argent/Bronze),
 ### CountryPrediction
 Stocke les prédictions de médailles futures pour les pays.
 
-## Import des Données
-
-Le script `import_data.py` parse les fichiers suivants :
-- `olympic_hosts.xml` : Données des Jeux Olympiques
-- `olympic_athletes.json` : Données des athlètes
-- `olympic_medals.xlsx` : Données des médailles
-
-Les 5 premières lignes de chaque fichier sont analysées pour comprendre la structure avant l'import.
-
-### Commandes d'Import
-
-```bash
-# Import avec limite pour test
-python import_data.py
-
-# Pour modifier les limites, éditez le fichier import_data.py
-# parse_olympic_hosts(hosts_file, limit=20)
-# parse_olympic_athletes(athletes_file, limit=500)
-# parse_olympic_medals(medals_file, limit=1000)
-```
-
-## Colonnes Pertinentes pour la Prédiction
-
-Les colonnes suivantes ont été identifiées comme pertinentes pour le modèle de prédiction :
-
-1. **Country (Pays)** : Historique des médailles par pays
-2. **Discipline** : Type de sport influence le nombre de médailles
-3. **Game Year/Season** : Tendances temporelles et saison (été/hiver)
-4. **Athlete Participation Count** : Expérience de l'athlète
-5. **Medal Type** : Variable cible pour l'entraînement du modèle
-
-## Fonctionnalités
-
-### Actuellement Implémentées
-- ✅ Visualisation des statistiques globales
-- ✅ Liste et détails des pays
-- ✅ Liste et détails des Jeux Olympiques
-- ✅ Liste des athlètes
-- ✅ Analyse des médailles par discipline
-- ✅ Interface responsive avec Bootstrap
-- ✅ Interface d'administration Django
-- ✅ Import automatique des données
-
-### À Développer
-- 🔄 Modèle de machine learning pour les prédictions
-- 🔄 Génération automatique des prédictions
-- 🔄 Graphiques et visualisations avancées
-- 🔄 Filtres et recherche avancée
-- 🔄 Export des données (CSV, Excel)
-- 🔄 API REST pour accès programmatique
-
 ## Tests
 
-Pour tester l'application :
-
+### Backend
 ```bash
-# Vérifier la configuration Django
 python manage.py check
-
-# Tester les URLs
-python manage.py show_urls  # Si django-extensions installé
-
-# Accéder à l'interface web
-python manage.py runserver
+python manage.py test
 ```
 
-## Débogage
-
-En cas de problème :
-
-1. Vérifiez que les migrations sont appliquées :
+### Frontend
 ```bash
-python manage.py showmigrations
+cd frontend
+npm run lint
+npm run build  # Vérifier que le build fonctionne
 ```
 
-2. Vérifiez que les données sont importées :
+## Déploiement
+
+### Backend Django
+Utilisez gunicorn ou un serveur WSGI :
 ```bash
-python manage.py shell
->>> from predictions.models import *
->>> print(f"Games: {OlympicGame.objects.count()}")
->>> print(f"Countries: {Country.objects.count()}")
->>> print(f"Medals: {Medal.objects.count()}")
+pip install gunicorn
+gunicorn config.wsgi:application
 ```
 
-3. Consultez les logs du serveur de développement
+### Frontend React
+Build de production :
+```bash
+cd frontend
+npm run build
+# Les fichiers seront dans dist/
+```
 
 ## Contribution
 
-Ce projet a été développé de manière méthodique et rigoureuse en suivant les meilleures pratiques Django.
+Projet développé avec les meilleures pratiques :
+- Architecture découplée frontend/backend
+- API REST standardisée
+- Code modulaire et réutilisable
+- Gestion des erreurs robuste
 
 ## Licence
 

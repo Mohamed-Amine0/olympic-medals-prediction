@@ -60,3 +60,13 @@ Thumbs.db
 # Migrations (optionnel - vous pouvez choisir de les versionner)
 # */migrations/*.py
 # !*/migrations/__init__.py
+
+# Frontend React/Node
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
