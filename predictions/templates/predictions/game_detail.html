@@ -1,0 +1,149 @@
+{% extends 'predictions/base.html' %}
+
+{% block title %}{{ game.game_name }} - Olympic Medals Prediction{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'predictions:home' %}">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'predictions:games_list' %}">Jeux Olympiques</a></li>
+                <li class="breadcrumb-item active">{{ game.game_name }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card {% if game.game_season == 'Winter' %}bg-info{% else %}bg-warning{% endif %} text-white">
+            <div class="card-body">
+                <h1 class="display-4">
+                    <i class="bi bi-{% if game.game_season == 'Winter' %}snow{% else %}brightness-high{% endif %}"></i>
+                    {{ game.game_name }}
+                </h1>
+                <p class="lead">
+                    <i class="bi bi-geo-alt"></i> {{ game.game_location }} | 
+                    <i class="bi bi-calendar3"></i> {{ game.game_start_date|date:"d M Y" }} - {{ game.game_end_date|date:"d M Y" }}
+                </p>
+                <p class="mb-0">
+                    <span class="badge bg-light text-dark">{{ game.game_year }}</span>
+                    <span class="badge bg-light text-dark">{{ game.game_season }}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Countries -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-trophy"></i> Top 10 Pays pour {{ game.game_name }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Rang</th>
+                                <th>Pays</th>
+                                <th class="text-center">Médailles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for country_stat in top_countries %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    <a href="{% url 'predictions:country_detail' country_stat.country__id %}">
+                                        {{ country_stat.country__country_name }}
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-primary">{{ country_stat.medal_count }}</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center text-muted">Aucune donnée disponible</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Medals List -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-award"></i> Médailles (50 premières)</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Discipline</th>
+                                <th>Événement</th>
+                                <th>Pays</th>
+                                <th class="text-center">Type</th>
+                                <th>Athlète/Équipe</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for medal in medals %}
+                            <tr>
+                                <td>{{ medal.discipline_title }}</td>
+                                <td><small>{{ medal.event_title }}</small></td>
+                                <td>
+                                    <a href="{% url 'predictions:country_detail' medal.country.id %}">
+                                        {{ medal.country.country_name }}
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    {% if medal.medal_type == 'GOLD' %}
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-trophy-fill"></i> Or
+                                    </span>
+                                    {% elif medal.medal_type == 'SILVER' %}
+                                    <span class="badge bg-secondary">
+                                        <i class="bi bi-trophy-fill"></i> Argent
+                                    </span>
+                                    {% elif medal.medal_type == 'BRONZE' %}
+                                    <span class="badge" style="background-color: #CD7F32;">
+                                        <i class="bi bi-trophy-fill"></i> Bronze
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if medal.athlete %}
+                                    {{ medal.athlete.athlete_full_name }}
+                                    {% else %}
+                                    <span class="text-muted">{{ medal.participant_title|default:"Équipe" }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    <i class="bi bi-inbox fs-1"></i>
+                                    <p class="mt-2">Aucune médaille trouvée pour ce jeu</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

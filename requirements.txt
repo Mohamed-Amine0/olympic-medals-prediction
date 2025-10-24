@@ -1,0 +1,15 @@
+# Requirements pour Olympic Medals Prediction
+# Python 3.8+
+
+# Framework Django
+Django==5.2.1
+
+# Manipulation de données
+pandas==2.3.0
+
+# Parsing Excel
+openpyxl==3.1.2
+
+# Optionnel pour le développement
+# django-extensions  # Outils supplémentaires Django
+# ipython            # Shell interactif amélioré

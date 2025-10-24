@@ -1,0 +1,56 @@
+{% extends 'predictions/base.html' %}
+
+{% block title %}Jeux Olympiques - Olympic Medals Prediction{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1><i class="bi bi-calendar-event"></i> Jeux Olympiques</h1>
+        <p class="text-muted">Historique des Jeux Olympiques modernes</p>
+    </div>
+</div>
+
+<div class="row">
+    {% for game in games %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header {% if game.game_season == 'Winter' %}bg-info{% else %}bg-warning{% endif %} text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-{% if game.game_season == 'Winter' %}snow{% else %}brightness-high{% endif %}"></i>
+                    {{ game.game_name }}
+                </h5>
+            </div>
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">
+                    <i class="bi bi-geo-alt"></i> {{ game.game_location }}
+                </h6>
+                <p class="card-text">
+                    <strong>Année:</strong> {{ game.game_year }}<br>
+                    <strong>Saison:</strong> 
+                    <span class="badge {% if game.game_season == 'Winter' %}bg-info{% else %}bg-warning{% endif %}">
+                        {{ game.game_season }}
+                    </span>
+                </p>
+                <p class="card-text">
+                    <small class="text-muted">
+                        <i class="bi bi-calendar3"></i> 
+                        {{ game.game_start_date|date:"d M Y" }} - {{ game.game_end_date|date:"d M Y" }}
+                    </small>
+                </p>
+            </div>
+            <div class="card-footer bg-transparent">
+                <a href="{% url 'predictions:game_detail' game.id %}" class="btn btn-primary btn-sm w-100">
+                    <i class="bi bi-eye"></i> Voir les médailles
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Aucun jeu olympique trouvé dans la base de données.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

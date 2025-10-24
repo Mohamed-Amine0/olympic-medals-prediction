@@ -1,0 +1,162 @@
+{% extends 'predictions/base.html' %}
+
+{% block title %}Accueil - Olympic Medals Prediction{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="jumbotron bg-primary text-white p-5 rounded">
+            <h1 class="display-4"><i class="bi bi-trophy-fill"></i> Olympic Medals Prediction</h1>
+            <p class="lead">Système de prédiction des médailles olympiques basé sur l'analyse de données historiques</p>
+            <hr class="my-4 bg-white">
+            <p>Explorez les statistiques des jeux olympiques, des pays et des athlètes pour comprendre les tendances et prévoir les futures performances.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card bg-info text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-calendar-event fs-1"></i>
+                <h3 class="mt-2">{{ total_games }}</h3>
+                <p class="mb-0">Jeux Olympiques</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card bg-success text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-globe fs-1"></i>
+                <h3 class="mt-2">{{ total_countries }}</h3>
+                <p class="mb-0">Pays Participants</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card bg-warning text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-people fs-1"></i>
+                <h3 class="mt-2">{{ total_athletes }}</h3>
+                <p class="mb-0">Athlètes</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card bg-danger text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-award fs-1"></i>
+                <h3 class="mt-2">{{ total_medals }}</h3>
+                <p class="mb-0">Médailles</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Top Countries Section -->
+<div class="row mb-4">
+    <div class="col-lg-6 mb-3">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-trophy"></i> Top 10 Pays par Médailles</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Rang</th>
+                                <th>Pays</th>
+                                <th class="text-center"><i class="bi bi-trophy-fill medal-gold"></i></th>
+                                <th class="text-center"><i class="bi bi-trophy-fill medal-silver"></i></th>
+                                <th class="text-center"><i class="bi bi-trophy-fill medal-bronze"></i></th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for country in top_countries %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    <a href="{% url 'predictions:country_detail' country.id %}" class="text-decoration-none">
+                                        {{ country.country_name }}
+                                    </a>
+                                </td>
+                                <td class="text-center">{{ country.total_gold_medals }}</td>
+                                <td class="text-center">{{ country.total_silver_medals }}</td>
+                                <td class="text-center">{{ country.total_bronze_medals }}</td>
+                                <td class="text-center"><strong>{{ country.total_medals }}</strong></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Games Section -->
+    <div class="col-lg-6 mb-3">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="bi bi-calendar-event"></i> Jeux Olympiques Récents</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for game in recent_games %}
+                    <a href="{% url 'predictions:game_detail' game.id %}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ game.game_name }}</h6>
+                            <small class="badge bg-primary">{{ game.game_year }}</small>
+                        </div>
+                        <p class="mb-1">
+                            <i class="bi bi-geo-alt"></i> {{ game.game_location }}
+                        </p>
+                        <small class="text-muted">
+                            <i class="bi bi-calendar3"></i> 
+                            {{ game.game_start_date|date:"d M Y" }} - {{ game.game_end_date|date:"d M Y" }}
+                        </small>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-graph-up text-primary fs-1"></i>
+                <h5 class="card-title mt-3">Analyses Avancées</h5>
+                <p class="card-text">Explorez les tendances historiques et les performances des pays par discipline.</p>
+                <a href="{% url 'predictions:countries_list' %}" class="btn btn-outline-primary">Explorer</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-lightbulb text-warning fs-1"></i>
+                <h5 class="card-title mt-3">Prédictions Intelligentes</h5>
+                <p class="card-text">Modèles de machine learning pour prédire les futures performances olympiques.</p>
+                <a href="{% url 'predictions:predictions_list' %}" class="btn btn-outline-warning">Voir Prédictions</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-people text-success fs-1"></i>
+                <h5 class="card-title mt-3">Profils d'Athlètes</h5>
+                <p class="card-text">Découvrez les parcours des athlètes olympiques et leurs performances.</p>
+                <a href="{% url 'predictions:athletes_list' %}" class="btn btn-outline-success">Découvrir</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
