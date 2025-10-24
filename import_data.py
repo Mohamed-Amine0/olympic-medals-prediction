@@ -216,8 +216,9 @@ def main():
     print("IMPORT DES DONNÉES OLYMPIQUES")
     print("="*60)
     
-    # Chemins des fichiers
-    data_dir = Path(r'c:\Users\amine\OneDrive - AEROW SAS\Documents\Notebooks\IPSSI-Notebooks\week-13\Hackathon\data')
+    # Chemins des fichiers - utilise le répertoire data/ du projet
+    current_dir = Path(__file__).resolve().parent
+    data_dir = current_dir / 'data'
     hosts_file = data_dir / 'olympic_hosts.xml'
     athletes_file = data_dir / 'olympic_athletes.json'
     medals_file = data_dir / 'olympic_medals.xlsx'
