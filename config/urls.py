@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("predictions.urls")),
+    path("api/", include("predictions.api_urls")),  # API REST endpoints
+    path("", include("predictions.urls")),  # Keep original Django templates for now
 ]
